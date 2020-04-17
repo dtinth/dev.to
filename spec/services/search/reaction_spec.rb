@@ -40,7 +40,11 @@ RSpec.describe Search::Reaction, type: :service do
         allow(article1).to receive(:title).and_return("ruby")
         allow(article2).to receive(:body_text).and_return("Ruby Tuesday")
         index_documents([reaction1, reaction2])
+<<<<<<< HEAD
         query_params[:search_fields] = "ruby"
+=======
+        query_params.merge!(search_fields: "ruby")
+>>>>>>> temp
 
         reaction_docs = described_class.search_documents(params: query_params)["reactions"]
         expect(reaction_docs.count).to eq(2)
@@ -54,7 +58,11 @@ RSpec.describe Search::Reaction, type: :service do
         article1.tags << create(:tag, name: "ruby")
         article2.tags << create(:tag, name: "python")
         index_documents([reaction1, reaction2])
+<<<<<<< HEAD
         query_params[:tag_names] = "ruby"
+=======
+        query_params.merge!(tag_names: "ruby")
+>>>>>>> temp
 
         reaction_docs = described_class.search_documents(params: query_params)["reactions"]
         expect(reaction_docs.count).to eq(1)
@@ -64,7 +72,11 @@ RSpec.describe Search::Reaction, type: :service do
 
       it "filters by user_id" do
         index_documents([reaction1, reaction2])
+<<<<<<< HEAD
         query_params[:user_id] = reaction1.user_id
+=======
+        query_params.merge!(user_id: reaction1.user_id)
+>>>>>>> temp
 
         reaction_docs = described_class.search_documents(params: query_params)["reactions"]
         expect(reaction_docs.count).to eq(1)
@@ -75,7 +87,11 @@ RSpec.describe Search::Reaction, type: :service do
       it "filters by status" do
         reaction1.update(status: "invalid")
         index_documents([reaction1, reaction2])
+<<<<<<< HEAD
         query_params[:status] = ["valid"]
+=======
+        query_params.merge!(status: ["valid"])
+>>>>>>> temp
 
         reaction_docs = described_class.search_documents(params: query_params)["reactions"]
         expect(reaction_docs.count).to eq(1)
