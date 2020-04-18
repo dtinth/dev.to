@@ -1,0 +1,13 @@
+on:
+  push: {}
+name: Verify Docker setup script
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - run: |
+        bin/docker-setup &
+        npx wait-on http-get://localhost:3000 -t 3600000
