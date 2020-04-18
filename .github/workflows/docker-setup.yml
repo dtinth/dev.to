@@ -2,7 +2,7 @@ on:
   push: {}
 name: Verify Docker setup script
 jobs:
-  deploy:
+  test:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
@@ -20,4 +20,4 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
     - run: |
         bin/docker-setup &
-        npx wait-on http-get://localhost:3000 -t 3600000
+        npx wait-on http-get://localhost:3000 -t 1800000
