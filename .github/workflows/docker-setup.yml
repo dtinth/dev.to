@@ -8,6 +8,16 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - run: |
-        bin/docker-setup &
-        npx wait-on http-get://localhost:3000 -t 3600000
+    - id: cache-docker
+      uses: actions/cache@v1
+      with:
+        path: /tmp/docker-registry
+        key: docker-registry-no-buildkit-${{ hashFiles('Dockerfile') }}-${{ hashFiles('.ruby-version') }}-${{ hashFiles('Gemfile.lock') }}-${{ hashFiles('yarn.lock') }}
+    - run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2
+    - run: npx wait-on tcp:5000 && docker pull localhost:5000/cache || true
+    - run: docker build . -t devto_web --cache-from=localhost:5000/cache
+    - run: docker tag thing localhost:5000/cache && docker push localhost:5000/cache || true
+      if: steps.cache.outputs.cache-hit != 'true'
+#     - run: |
+#         bin/docker-setup &
+#         npx wait-on http-get://localhost:3000 -t 3600000
