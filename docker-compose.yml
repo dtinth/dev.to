@@ -1,7 +1,10 @@
 version: "3"
 services:
   web:
-    build: .
+    build:
+      context: .
+      cache_from:
+        - docker.pkg.github.com/dtinth/dev.to/build-cache
     ports:
       - "3000:3000"
     depends_on:
@@ -19,10 +22,16 @@ services:
       - .:/usr/src/app
     command: bundle exec rails server -b 0.0.0.0 -p 3000
   webpacker:
-    build: .
+    build:
+      context: .
+      cache_from:
+        - docker.pkg.github.com/dtinth/dev.to/build-cache
     command: ./bin/webpack-dev-server
   sidekiq:
-    build: .
+    build:
+      context: .
+      cache_from:
+        - docker.pkg.github.com/dtinth/dev.to/build-cache
     command: bundle exec sidekiq -c 2
     depends_on:
       - redis
