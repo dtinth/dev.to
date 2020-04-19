@@ -8,7 +8,6 @@ FROM ruby:2.7.1-alpine3.10
 RUN apk update -qq && apk add git nodejs postgresql-client ruby-dev build-base \
   less libxml2-dev libxslt-dev pcre-dev libffi-dev postgresql-dev tzdata imagemagick \
   libcurl curl-dev yarn
-RUN npm install -g wait-on
 
 #------------------------------------------------------------------------------
 #
@@ -47,6 +46,7 @@ COPY ./.yarn ./.yarn
 #
 #------------------------------------------------------------------------------
 RUN yarn install && yarn check --integrity
+RUN yarn global add wait-on
 
 # timeout extension required to ensure
 # system work properly on first time load
