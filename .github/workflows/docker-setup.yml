@@ -9,9 +9,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
+    - run: echo "${{ secrets.APPLICATION_YML_BASE64 }}" | base64 -d > config/application.yml
     - run: docker pull docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache || true
     - run: docker-compose build
     - run: docker tag devto_web docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache && docker push docker.pkg.github.com/$GITHUB_REPOSITORY/build-cache || true
-#     - run: |
-#         bin/docker-setup &
-#         npx wait-on http-get://localhost:3000 -t 1800000
+    - run: |
+        bin/docker-setup &
+        npx wait-on http-get://localhost:3000 -t 1800000
