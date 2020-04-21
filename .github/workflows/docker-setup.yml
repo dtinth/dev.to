@@ -16,3 +16,8 @@ jobs:
     - run: |
         bin/docker-setup &
         npx wait-on http-get://localhost:3000 -t 1800000
+    - run: google-chrome --headless --screenshot=/tmp/screenshot.png --window-size=1280,720 http://localhost:3000
+    - uses: actions/upload-artifact@v1
+      with:
+        name: screenshot
+        path: /tmp/screenshot.png
